@@ -15,6 +15,7 @@ export const Web3Context = React.createContext<Web3ContextInterface>({
   disconnectWallet: async () => undefined,
   address: '',
   ens: '',
+  asdfds,
 });
 
 const infuraId = 'd8759fe1122e4b19bdf7277a2771e1fb';
