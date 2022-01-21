@@ -1,13 +1,15 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import Web3Modal from 'web3modal';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { ethers } from 'ethers';
+import CyberConnect from '@cyberlab/cyberconnect';
 
 interface Web3ContextInterface {
-  connectWallet: () => void;
+  connectWallet: () => Promise<void>;
   disconnectWallet: () => void;
   address: string;
   ens: string | null;
+  cyberConnect: CyberConnect | null;
 }
 
 export const Web3Context = React.createContext<Web3ContextInterface>({
@@ -15,7 +17,7 @@ export const Web3Context = React.createContext<Web3ContextInterface>({
   disconnectWallet: async () => undefined,
   address: '',
   ens: '',
-  asdfds,
+  cyberConnect: null,
 });
 
 const infuraId = 'd8759fe1122e4b19bdf7277a2771e1fb';
@@ -33,6 +35,7 @@ export const Web3ContextProvider: React.FC = ({ children }) => {
   const [address, setAddress] = useState<string>('');
   const [ens, setEns] = useState<string | null>('');
   const [web3Modal, setWeb3Modal] = useState<Web3Modal | undefined>(undefined);
+  const [cyberConnect, setCyberConnect] = useState<CyberConnect | null>(null);
 
   async function getEnsByAddress(
     provider: ethers.providers.Web3Provider,
@@ -73,6 +76,15 @@ export const Web3ContextProvider: React.FC = ({ children }) => {
     [disconnectWallet]
   );
 
+  const initCyberConnect = useCallback((provider: any) => {
+    const cyberConnect = new CyberConnect({
+      provider,
+      namespace: 'CyberConnect',
+    });
+
+    setCyberConnect(cyberConnect);
+  }, []);
+
   const connectWallet = React.useCallback(async () => {
     if (!web3Modal) {
       console.error('web3modal not initialized');
@@ -89,11 +101,13 @@ export const Web3ContextProvider: React.FC = ({ children }) => {
       setAddress(address);
       setEns(ens);
       subsribeProvider(provider);
+
+      initCyberConnect(provider.provider);
     } catch (e) {
       disconnectWallet();
       throw e;
     }
-  }, [web3Modal, disconnectWallet, subsribeProvider]);
+  }, [web3Modal, disconnectWallet, subsribeProvider, initCyberConnect]);
 
   useEffect(() => {
     const web3Modal = new Web3Modal({
@@ -112,6 +126,7 @@ export const Web3ContextProvider: React.FC = ({ children }) => {
         disconnectWallet,
         address,
         ens,
+        cyberConnect,
       }}
     >
       {children}
