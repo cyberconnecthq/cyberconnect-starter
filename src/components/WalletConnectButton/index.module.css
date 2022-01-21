@@ -15,7 +15,7 @@
   font-size: 16px;
   font-weight: 600;
   line-height: normal;
-  margin-bottom: 20px;
+  margin-top: 40px;
   min-height: 60px;
   min-width: 0px;
   outline: none;
@@ -26,7 +26,7 @@
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
-  width: 200px;
+  width: 250px;
   will-change: transform;
 }
 

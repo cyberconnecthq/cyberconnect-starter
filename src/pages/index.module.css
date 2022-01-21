@@ -8,46 +8,82 @@
 }
 .logo {
   width: 500px;
+  position: relative;
+  bottom: 50px;
+}
+
+.discription {
+  text-align: center;
+  width: 800px;
+  position: relative;
+  margin-top: -100px;
 }
 
 .userInfo {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.inputContainer {
+  justify-content: center;
+  align-items: center;
+}
+
+.isFollowed {
+  margin-right: 290px;
+  margin-top: 10px;
+}
+
+.error {
+  color: rgb(160, 101, 101);
+  margin-right: 300px;
+  margin-top: 10px;
 }
 
 .listsContainer {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: center;
   position: relative;
 }
 
 .loadingButton {
-  color: white;
-  background-color: black;
-  margin: 10px;
+  margin-left: 15px;
+  height: 55px;
 }
 
-.loadingButton:hover {
+/* .loadingButton:hover {
   color: black;
   border: 2px solid black;
-}
+} */
 
 .list {
-  border: 2px solid gray;
-  border-radius: 15px;
+  border: 1px solid gray;
+  border-radius: 5px;
   align-items: center;
+  justify-content: center;
   padding: 1rem;
   margin: 3rem;
   width: 300px;
-  min-height: 500px;
+  height: 500px;
+}
+
+.followersList {
+  overflow: auto;
+  height: 400px;
+}
+
+.followingsList {
+  overflow: auto;
+  height: 400px;
 }
 
 .subtitle {
   font-size: larger;
-  padding: 1rem;
+  margin-left: 30px;
+  margin-bottom: 10px;
 }
 
 .textField {
