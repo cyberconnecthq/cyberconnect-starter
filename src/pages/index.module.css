@@ -6,3 +6,66 @@
   justify-content: center;
   flex-direction: column;
 }
+.logo {
+  width: 500px;
+}
+
+.userInfo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.listsContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.loadingButton {
+  color: white;
+  background-color: black;
+  margin: 10px;
+}
+
+.loadingButton:hover {
+  color: black;
+  border: 2px solid black;
+}
+
+.list {
+  border: 2px solid gray;
+  border-radius: 15px;
+  align-items: center;
+  padding: 1rem;
+  margin: 3rem;
+  width: 300px;
+  min-height: 500px;
+}
+
+.subtitle {
+  font-size: larger;
+  padding: 1rem;
+}
+
+.textField {
+  width: 420px;
+  text-align: center;
+}
+
+.user {
+  display: flex;
+  padding: 1rem;
+  justify-content: left;
+  align-items: center;
+}
+
+.avatar {
+  margin-right: 1rem;
+}
+
+.userAddress {
+  font-weight: bold;
+}

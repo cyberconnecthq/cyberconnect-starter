@@ -1,26 +1,26 @@
-import type { NextPage } from 'next';
-import styles from './index.module.css';
-import { WalletConnectButton } from '@/components';
+import type { NextPage } from "next";
+import styles from "./index.module.css";
+import { WalletConnectButton } from "@/components";
 import {
   identity as identityQuery,
   followStatus,
   Identity,
-} from '@/utils/query';
-import { useWeb3 } from '@/context/web3Context';
-import { useCallback, useEffect, useState } from 'react';
-import TextField from '@mui/material/TextField';
-import { isValidAddr } from '@/utils/helper';
-import LoadingButton from '@mui/lab/LoadingButton';
-import { formatAddress } from '@/utils';
-import Avatar from '@mui/material/Avatar';
+} from "@/utils/query";
+import { useWeb3 } from "@/context/web3Context";
+import { useCallback, useEffect, useState } from "react";
+import TextField from "@mui/material/TextField";
+import { isValidAddr } from "@/utils/helper";
+import LoadingButton from "@mui/lab/LoadingButton";
+import { formatAddress } from "@/utils";
+import Avatar from "@mui/material/Avatar";
 
-const NAME_SPACE = 'CyberConnect';
-const NETWORK = 'ethereum';
+const NAME_SPACE = "CyberConnect";
+const NETWORK = "ethereum";
 
 const Home: NextPage = () => {
   const { connectWallet, address, ens, cyberConnect } = useWeb3();
 
-  const [searchInput, setSearchInput] = useState<string>('');
+  const [searchInput, setSearchInput] = useState<string>("");
   const [searchAddrFollowStatus, setSearchAddrFollowStatus] = useState<{
     isFollowing: Boolean;
     isFollowed: boolean;
@@ -95,13 +95,13 @@ const Home: NextPage = () => {
   }, [address]);
 
   const fetchMore = useCallback(
-    async (type: 'followings' | 'followers') => {
+    async (type: "followings" | "followers") => {
       if (!address || !identity) {
         return;
       }
 
       const params =
-        type === 'followers'
+        type === "followers"
           ? {
               address,
               namespace: NAME_SPACE,
@@ -119,7 +119,7 @@ const Home: NextPage = () => {
 
       const resp = await identityQuery(params);
       if (resp) {
-        type === 'followers'
+        type === "followers"
           ? setIdentity({
               ...identity,
               followers: {
@@ -145,56 +145,87 @@ const Home: NextPage = () => {
 
   return (
     <div className={styles.container}>
+      <img
+        src="/cyberconnect-logo.png"
+        alt="CyberConnect Logo"
+        className={styles.logo}
+      />
+      <p>
+        This is a CyberConnect starter app. You can freely use it as a base for
+        your application.{" "}
+      </p>
+      <p>
+        In this app, users can sign in with Ethereum wallet, and displays their
+        followings and followers. They can check if a user address is their
+        following or follower, and follow the user of the address.{" "}
+      </p>
       <WalletConnectButton />
-      <TextField onChange={(e) => handleInputChange(e.target.value)} />
-      <LoadingButton
-        onClick={handleFollow}
-        disabled={searchLoading || !isValidAddr(searchInput) || !address}
-        loading={followLoading}
-      >
-        {!searchAddrFollowStatus.isFollowing ? 'Follow' : 'Unfollow'}
-      </LoadingButton>
-      {isValidAddr(searchInput) && (
-        <div>
-          This user{' '}
-          {searchAddrFollowStatus.isFollowed
-            ? 'has followed you'
-            : 'has not followed you'}
-        </div>
-      )}
       {identity && (
         <div>
-          <div>
-            <div>You have {identity.followerCount} followers</div>
-            {identity.followers.list.map((user) => {
-              return (
-                <div key={user.address}>
-                  <Avatar src={user.avatar} />
-                  {user.ens || formatAddress(user.address)}
-                </div>
-              );
-            })}
-            {identity.followers.pageInfo.hasNextPage && (
-              <LoadingButton onClick={() => fetchMore('followers')}>
-                See More
-              </LoadingButton>
+          <div className={styles.userInfo}>
+            <TextField
+              onChange={(e) => handleInputChange(e.target.value)}
+              className={styles.textField}
+              placeholder="Please input the Address you want to check."
+            />
+            <LoadingButton
+              onClick={handleFollow}
+              disabled={searchLoading || !isValidAddr(searchInput) || !address}
+              loading={followLoading}
+              className={styles.loadingButton}
+            >
+              {!searchAddrFollowStatus.isFollowing ? "Follow" : "Unfollow"}
+            </LoadingButton>
+            {isValidAddr(searchInput) && (
+              <div>
+                This user{" "}
+                {searchAddrFollowStatus.isFollowed
+                  ? "has followed you"
+                  : "has not followed you"}
+              </div>
             )}
           </div>
-          <div>
-            <div>You have {identity.followingCount} followings</div>
-            {identity.followings.list.map((user) => {
-              return (
-                <div key={user.address}>
-                  <Avatar src={user.avatar} />
-                  {user.ens || formatAddress(user.address)}
-                </div>
-              );
-            })}
-            {identity.followings.pageInfo.hasNextPage && (
-              <LoadingButton onClick={() => fetchMore('followings')}>
-                See More
-              </LoadingButton>
-            )}
+          <div className={styles.listsContainer}>
+            <div className={styles.list}>
+              <div className={styles.subtitle}>
+                You have {identity.followerCount} followers:
+              </div>
+              {identity.followers.list.map((user) => {
+                return (
+                  <div key={user.address} className={styles.user}>
+                    <Avatar src={user.avatar} className={styles.avatar} />
+                    <div className={styles.userAddress}>
+                      {user.ens || formatAddress(user.address)}
+                    </div>
+                  </div>
+                );
+              })}
+              {identity.followers.pageInfo.hasNextPage && (
+                <LoadingButton onClick={() => fetchMore("followers")}>
+                  See More
+                </LoadingButton>
+              )}
+            </div>
+            <div className={styles.list}>
+              <div className={styles.subtitle}>
+                You have {identity.followingCount} followings:
+              </div>
+              {identity.followings.list.map((user) => {
+                return (
+                  <div key={user.address} className={styles.user}>
+                    <Avatar src={user.avatar} className={styles.avatar} />
+                    <div className={styles.userAddress}>
+                      {user.ens || formatAddress(user.address)}
+                    </div>
+                  </div>
+                );
+              })}
+              {identity.followings.pageInfo.hasNextPage && (
+                <LoadingButton onClick={() => fetchMore("followings")}>
+                  See More
+                </LoadingButton>
+              )}
+            </div>
           </div>
         </div>
       )}
