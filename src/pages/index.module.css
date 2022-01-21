@@ -62,8 +62,9 @@
 .list {
   border: 1px solid gray;
   border-radius: 5px;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
   padding: 1rem;
   margin: 3rem;
   width: 300px;
@@ -72,17 +73,24 @@
 
 .followersList {
   overflow: auto;
+  width: 250px;
   height: 400px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 .followingsList {
   overflow: auto;
+  width: 250px;
   height: 400px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 .subtitle {
-  font-size: larger;
-  margin-left: 30px;
+  font-size: medium;
   margin-bottom: 10px;
 }
 
@@ -93,7 +101,7 @@
 
 .user {
   display: flex;
-  padding: 1rem;
+  margin: 0.7rem;
   justify-content: left;
   align-items: center;
 }

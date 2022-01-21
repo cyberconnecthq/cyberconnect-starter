@@ -235,13 +235,12 @@ const Home: NextPage = () => {
                     </div>
                   );
                 })}
+                {identity.followings.pageInfo.hasNextPage && (
+                  <LoadingButton onClick={() => fetchMore("followings")}>
+                    See More
+                  </LoadingButton>
+                )}
               </div>
-
-              {identity.followings.pageInfo.hasNextPage && (
-                <LoadingButton onClick={() => fetchMore("followings")}>
-                  See More
-                </LoadingButton>
-              )}
             </div>
           </div>
         </div>
