@@ -1,29 +1,72 @@
-export type Query = 'connect' | 'disconnect';
-
-export const allFollowingsSchema = ({
-  address,
-  namespace,
-}: {
+interface IdentityArgs {
   address: string;
   namespace?: string;
-}) => {
+  network?: string;
+  first?: number;
+  after?: string;
+}
+
+export const followingsSchema = ({
+  address,
+  namespace,
+  network,
+  first,
+  after,
+}: IdentityArgs) => {
   return {
-    operationName: 'allFollowings',
-    query: `query allFollowings($address: String!, $namespace: String) {
-      allFollowings(address: $address, namespace: $namespace) {
-        address
-        ens
-        alias
-        namespace
-        lastModifiedTime
+    operationName: 'identity',
+    query: `query identity($address: String!, $namespace: String, $network: String, $first: Int, $after: String) {
+      identity(address: $address, network: $network) {
+        followingCount(namespace: $namespace, network: $network)
+        followings(namespace: $namespace, network: $network, first: $first, after: $after) {
+          pageInfo {
+            endCursor
+            hasNextPage
+          }
+          list {
+            address
+            ens
+            avatar
+          }
+        }
       }
     }`,
-    variables: { address, namespace },
+    variables: { address, namespace, network, first, after },
+  };
+};
+
+export const followersSchema = ({
+  address,
+  namespace,
+  network,
+  first,
+  after,
+}: IdentityArgs) => {
+  return {
+    operationName: 'identity',
+    query: `query identity($address: String!, $namespace: String, $network: String, $first: Int, $after: String) {
+      identity(address: $address, network: $network) {
+        followerCount(namespace: $namespace, network: $network)
+        followers(namespace: $namespace, network: $network, first: $first, after: $after) {
+          pageInfo {
+            endCursor
+            hasNextPage
+          }
+          list {
+            address
+            ens
+            avatar
+          }
+        }
+      }
+    }`,
+    variables: { address, namespace, network, first, after },
   };
 };
 
 export const querySchemas = {
-  allFollowings: allFollowingsSchema,
+  followings: followingsSchema,
+  followers: followersSchema,
 };
 
 export const request = async (url = '', data = {}) => {
@@ -53,20 +96,42 @@ export const handleQuery = (
   return request(url, data);
 };
 
-export const allFollowings = async ({
+export const followings = async ({
   address,
   namespace,
+  network,
+  first,
+  after,
   url,
-}: {
-  address: string;
-  namespace: string;
-  url: string;
-}) => {
-  const schema = querySchemas['allFollowings']({
+}: IdentityArgs & { url: string }) => {
+  const schema = querySchemas['followings']({
     address,
     namespace,
+    network,
+    first,
+    after,
   });
   const resp = await handleQuery(schema, url);
 
-  return resp?.data?.allFollowings || [];
+  return resp?.data?.identity || {};
+};
+
+export const followers = async ({
+  address,
+  namespace,
+  network,
+  first,
+  after,
+  url,
+}: IdentityArgs & { url: string }) => {
+  const schema = querySchemas['followers']({
+    address,
+    namespace,
+    network,
+    first,
+    after,
+  });
+  const resp = await handleQuery(schema, url);
+
+  return resp?.data?.identity || {};
 };
