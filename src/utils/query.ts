@@ -2,23 +2,67 @@ interface IdentityArgs {
   address: string;
   namespace?: string;
   network?: string;
-  first?: number;
-  after?: string;
+  followingFirst?: number;
+  followingAfter?: string;
+  followerFirst?: number;
+  followerAfter?: string;
 }
 
-export const followingsSchema = ({
+interface FollowStatusArgs {
+  fromAddr: string;
+  toAddr: string;
+  namespace?: string;
+  network?: string;
+}
+
+interface BasicInfo {
+  pageInfo: {
+    endCursor: string;
+    hasNextPage: boolean;
+  };
+  list: {
+    ens: string;
+    address: string;
+    avatar: string;
+  }[];
+}
+
+export interface Identity {
+  followingCount: number;
+  followerCount: number;
+  followings: BasicInfo;
+  followers: BasicInfo;
+}
+
+const endPoint = 'https://api.cybertino.io/connect/';
+
+export const identitySchema = ({
   address,
   namespace,
   network,
-  first,
-  after,
+  followingFirst,
+  followingAfter,
+  followerFirst,
+  followerAfter,
 }: IdentityArgs) => {
   return {
     operationName: 'identity',
-    query: `query identity($address: String!, $namespace: String, $network: String, $first: Int, $after: String) {
+    query: `query identity($address: String!, $namespace: String, $network: String, $followingFirst: Int, $followingAfter: String, $followerFirst: Int, $followerAfter: String) {
       identity(address: $address, network: $network) {
         followingCount(namespace: $namespace, network: $network)
-        followings(namespace: $namespace, network: $network, first: $first, after: $after) {
+        followerCount(namespace: $namespace, network: $network)
+        followings(namespace: $namespace, network: $network, first: $followingFirst, after: $followingAfter) {
+          pageInfo {
+            endCursor
+            hasNextPage
+          }
+          list {
+            address
+            ens
+            avatar
+          }
+        }
+        followers(namespace: $namespace, network: $network, first: $followerFirst, after: $followerAfter) {
           pageInfo {
             endCursor
             hasNextPage
@@ -31,42 +75,39 @@ export const followingsSchema = ({
         }
       }
     }`,
-    variables: { address, namespace, network, first, after },
+    variables: {
+      address,
+      namespace,
+      network,
+      followingFirst,
+      followingAfter,
+      followerFirst,
+      followerAfter,
+    },
   };
 };
 
-export const followersSchema = ({
-  address,
+export const followStatusSchema = ({
+  fromAddr,
+  toAddr,
   namespace,
   network,
-  first,
-  after,
-}: IdentityArgs) => {
+}: FollowStatusArgs) => {
   return {
-    operationName: 'identity',
-    query: `query identity($address: String!, $namespace: String, $network: String, $first: Int, $after: String) {
-      identity(address: $address, network: $network) {
-        followerCount(namespace: $namespace, network: $network)
-        followers(namespace: $namespace, network: $network, first: $first, after: $after) {
-          pageInfo {
-            endCursor
-            hasNextPage
-          }
-          list {
-            address
-            ens
-            avatar
-          }
-        }
+    operationName: 'followStatus',
+    query: `query followStatus($fromAddr: String!, $toAddr: String!, $namespace: String, $network: String) {
+      followStatus(fromAddr: $fromAddr, toAddr: $toAddr, namespace: $namespace, network: $network) {
+        isFollowed
+        isFollowing
       }
     }`,
-    variables: { address, namespace, network, first, after },
+    variables: { fromAddr, toAddr, namespace, network },
   };
 };
 
 export const querySchemas = {
-  followings: followingsSchema,
-  followers: followersSchema,
+  identity: identitySchema,
+  followStatus: followStatusSchema,
 };
 
 export const request = async (url = '', data = {}) => {
@@ -96,42 +137,42 @@ export const handleQuery = (
   return request(url, data);
 };
 
-export const followings = async ({
+export const identity = async ({
   address,
   namespace,
   network,
-  first,
-  after,
-  url,
-}: IdentityArgs & { url: string }) => {
-  const schema = querySchemas['followings']({
+  followingFirst,
+  followingAfter,
+  followerFirst,
+  followerAfter,
+}: IdentityArgs) => {
+  const schema = querySchemas['identity']({
     address,
     namespace,
     network,
-    first,
-    after,
+    followingFirst,
+    followingAfter,
+    followerFirst,
+    followerAfter,
   });
-  const resp = await handleQuery(schema, url);
+  const resp = await handleQuery(schema, endPoint);
 
-  return resp?.data?.identity || {};
+  return (resp?.data?.identity as Identity) || null;
 };
 
-export const followers = async ({
-  address,
+export const followStatus = async ({
+  fromAddr,
+  toAddr,
   namespace,
   network,
-  first,
-  after,
-  url,
-}: IdentityArgs & { url: string }) => {
-  const schema = querySchemas['followers']({
-    address,
+}: FollowStatusArgs) => {
+  const schema = querySchemas['followStatus']({
+    fromAddr,
+    toAddr,
     namespace,
     network,
-    first,
-    after,
   });
-  const resp = await handleQuery(schema, url);
+  const resp = await handleQuery(schema, endPoint);
 
-  return resp?.data?.identity || {};
+  return resp?.data?.followStatus || null;
 };
