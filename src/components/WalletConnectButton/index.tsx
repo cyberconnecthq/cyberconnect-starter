@@ -20,7 +20,7 @@ export const WalletConnectButton: React.FC = () => {
         <LoadingButton
           loading={loading}
           onClick={connect}
-          className={styles.loadingButton}
+          className={styles.connectWalletButton}
           sx={{
             "& .MuiLoadingButton-loadingIndicator": {
               color: "#fff",

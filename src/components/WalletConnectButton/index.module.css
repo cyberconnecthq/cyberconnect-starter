@@ -3,7 +3,7 @@
   padding: 1rem;
 }
 
-.loadingButton {
+.connectWalletButton {
   background-color: #000000;
   border: 2px solid #1a1a1a;
   border-radius: 15px;
@@ -19,16 +19,16 @@
   will-change: transform;
 }
 
-.loadingButton:disabled {
+.connectWalletButton:disabled {
   pointer-events: none;
 }
 
-.loadingButton:hover {
+.connectWalletButton:hover {
   transform: translateY(-2px);
   color: #000000;
 }
 
-.loadingButton:active {
+.connectWalletButton:active {
   box-shadow: none;
   transform: translateY(0);
 }

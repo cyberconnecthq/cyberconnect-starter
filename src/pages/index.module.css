@@ -8,8 +8,8 @@
 }
 .logo {
   width: 500px;
+  height: 500px;
   position: relative;
-  bottom: 50px;
 }
 
 .discription {

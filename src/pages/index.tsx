@@ -13,6 +13,7 @@ import { isValidAddr } from "@/utils/helper";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { formatAddress } from "@/utils";
 import Avatar from "@mui/material/Avatar";
+import Image from "next/image";
 
 const NAME_SPACE = "CyberConnect";
 const NETWORK = "ethereum";
@@ -145,14 +146,16 @@ const Home: NextPage = () => {
 
   return (
     <div className={styles.container}>
-      <img
-        src="/cyberconnect-logo.png"
-        alt="CyberConnect Logo"
-        className={styles.logo}
-      />
+      <div className={styles.logo}>
+        <Image
+          src="/cyberconnect-logo.png"
+          alt="CyberConnect Logo"
+          layout="fill"
+        />
+      </div>
       <div className={styles.discription}>
         <p>
-          This is a CyberConnect starter app. You can freely use it as a base
+          This is the CyberConnect starter app. You can freely use it as a base
           for your application.{" "}
         </p>
         <p>
@@ -198,6 +201,7 @@ const Home: NextPage = () => {
             </div>
           </div>
           <div className={styles.listsContainer}>
+            {/* Follower List */}
             <div className={styles.list}>
               <div className={styles.subtitle}>
                 You have <strong>{identity.followerCount}</strong> followers:
@@ -213,13 +217,14 @@ const Home: NextPage = () => {
                     </div>
                   );
                 })}
+                {identity.followers.pageInfo.hasNextPage && (
+                  <LoadingButton onClick={() => fetchMore("followers")}>
+                    See More
+                  </LoadingButton>
+                )}
               </div>
-              {identity.followers.pageInfo.hasNextPage && (
-                <LoadingButton onClick={() => fetchMore("followers")}>
-                  See More
-                </LoadingButton>
-              )}
             </div>
+            {/* Following List */}
             <div className={styles.list}>
               <div className={styles.subtitle}>
                 You have <strong>{identity.followingCount}</strong> followings:
