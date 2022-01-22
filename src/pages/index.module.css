@@ -6,3 +6,110 @@
   justify-content: center;
   flex-direction: column;
 }
+.logo {
+  width: 500px;
+  height: 500px;
+  position: relative;
+}
+
+.discription {
+  text-align: center;
+  width: 800px;
+  position: relative;
+  margin-top: -100px;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.inputContainer {
+  justify-content: center;
+  align-items: center;
+}
+
+.isFollowed {
+  margin-right: 290px;
+  margin-top: 10px;
+}
+
+.error {
+  color: rgb(160, 101, 101);
+  margin-right: 300px;
+  margin-top: 10px;
+}
+
+.listsContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  position: relative;
+}
+
+.loadingButton {
+  margin-left: 15px;
+  height: 55px;
+}
+
+/* .loadingButton:hover {
+  color: black;
+  border: 2px solid black;
+} */
+
+.list {
+  border: 1px solid gray;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  margin: 3rem;
+  width: 300px;
+  height: 500px;
+}
+
+.followersList {
+  overflow: auto;
+  width: 250px;
+  height: 400px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.followingsList {
+  overflow: auto;
+  width: 250px;
+  height: 400px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.subtitle {
+  font-size: medium;
+  margin-bottom: 10px;
+}
+
+.textField {
+  width: 420px;
+  text-align: center;
+}
+
+.user {
+  display: flex;
+  margin: 0.7rem;
+  justify-content: left;
+  align-items: center;
+}
+
+.avatar {
+  margin-right: 1rem;
+}
+
+.userAddress {
+  font-weight: bold;
+}
