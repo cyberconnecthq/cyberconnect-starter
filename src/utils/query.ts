@@ -1,42 +1,13 @@
-interface IdentityArgs {
-  address: string;
-  namespace?: string;
-  network?: string;
-  followingFirst?: number;
-  followingAfter?: string;
-  followerFirst?: number;
-  followerAfter?: string;
-}
-
-interface FollowStatusArgs {
-  fromAddr: string;
-  toAddr: string;
-  namespace?: string;
-  network?: string;
-}
-
-interface BasicInfo {
-  pageInfo: {
-    endCursor: string;
-    hasNextPage: boolean;
-  };
-  list: {
-    ens: string;
-    address: string;
-    avatar: string;
-  }[];
-}
-
-export interface Identity {
-  followingCount: number;
-  followerCount: number;
-  followings: BasicInfo;
-  followers: BasicInfo;
-}
+import {
+  FollowListInfoArgs,
+  SearchUserInfoArgs,
+  FollowListInfoResp,
+  SearchUserInfoResp,
+} from './types';
 
 const endPoint = 'https://api.cybertino.io/connect/';
 
-export const identitySchema = ({
+export const followListInfoSchema = ({
   address,
   namespace,
   network,
@@ -44,10 +15,10 @@ export const identitySchema = ({
   followingAfter,
   followerFirst,
   followerAfter,
-}: IdentityArgs) => {
+}: FollowListInfoArgs) => {
   return {
-    operationName: 'identity',
-    query: `query identity($address: String!, $namespace: String, $network: String, $followingFirst: Int, $followingAfter: String, $followerFirst: Int, $followerAfter: String) {
+    operationName: 'followListInfo',
+    query: `query followListInfo($address: String!, $namespace: String, $network: String, $followingFirst: Int, $followingAfter: String, $followerFirst: Int, $followerAfter: String) {
       identity(address: $address, network: $network) {
         followingCount(namespace: $namespace, network: $network)
         followerCount(namespace: $namespace, network: $network)
@@ -87,27 +58,37 @@ export const identitySchema = ({
   };
 };
 
-export const followStatusSchema = ({
+export const searchUserInfoSchema = ({
   fromAddr,
   toAddr,
   namespace,
   network,
-}: FollowStatusArgs) => {
+}: SearchUserInfoArgs) => {
   return {
-    operationName: 'followStatus',
-    query: `query followStatus($fromAddr: String!, $toAddr: String!, $namespace: String, $network: String) {
+    operationName: 'searchUserInfo',
+    query: `query searchUserInfo($fromAddr: String!, $toAddr: String!, $namespace: String, $network: String) {
+      identity(address: $toAddr, network: $network) {
+        address
+        ens
+        avatar
+      }
       followStatus(fromAddr: $fromAddr, toAddr: $toAddr, namespace: $namespace, network: $network) {
         isFollowed
         isFollowing
       }
     }`,
-    variables: { fromAddr, toAddr, namespace, network },
+    variables: {
+      fromAddr,
+      toAddr,
+      namespace,
+      network,
+    },
   };
 };
 
 export const querySchemas = {
-  identity: identitySchema,
-  followStatus: followStatusSchema,
+  followListInfo: followListInfoSchema,
+  searchUserInfo: searchUserInfoSchema,
 };
 
 export const request = async (url = '', data = {}) => {
@@ -137,7 +118,7 @@ export const handleQuery = (
   return request(url, data);
 };
 
-export const identity = async ({
+export const followListInfoQuery = async ({
   address,
   namespace,
   network,
@@ -145,8 +126,8 @@ export const identity = async ({
   followingAfter,
   followerFirst,
   followerAfter,
-}: IdentityArgs) => {
-  const schema = querySchemas['identity']({
+}: FollowListInfoArgs) => {
+  const schema = querySchemas['followListInfo']({
     address,
     namespace,
     network,
@@ -157,16 +138,16 @@ export const identity = async ({
   });
   const resp = await handleQuery(schema, endPoint);
 
-  return (resp?.data?.identity as Identity) || null;
+  return (resp?.data?.identity as FollowListInfoResp) || null;
 };
 
-export const followStatus = async ({
+export const searchUserInfoQuery = async ({
   fromAddr,
   toAddr,
   namespace,
   network,
-}: FollowStatusArgs) => {
-  const schema = querySchemas['followStatus']({
+}: SearchUserInfoArgs) => {
+  const schema = querySchemas['searchUserInfo']({
     fromAddr,
     toAddr,
     namespace,
@@ -174,5 +155,5 @@ export const followStatus = async ({
   });
   const resp = await handleQuery(schema, endPoint);
 
-  return resp?.data?.followStatus || null;
+  return (resp?.data as SearchUserInfoResp) || null;
 };
