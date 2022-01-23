@@ -1,8 +1,8 @@
-import { useState, useCallback } from "react";
-import LoadingButton from "@mui/lab/LoadingButton";
-import { useWeb3 } from "@/context/web3Context";
-import { formatAddress } from "@/utils";
-import styles from "./index.module.css";
+import { useState, useCallback } from 'react';
+import LoadingButton from '@mui/lab/LoadingButton';
+import { useWeb3 } from '@/context/web3Context';
+import { formatAddress } from '@/utils/helper';
+import styles from './index.module.css';
 
 export const WalletConnectButton: React.FC = () => {
   const { connectWallet, address, ens } = useWeb3();
@@ -22,8 +22,8 @@ export const WalletConnectButton: React.FC = () => {
           onClick={connect}
           className={styles.connectWalletButton}
           sx={{
-            "& .MuiLoadingButton-loadingIndicator": {
-              color: "#fff",
+            '& .MuiLoadingButton-loadingIndicator': {
+              color: '#fff',
             },
           }}
         >
@@ -38,4 +38,4 @@ export const WalletConnectButton: React.FC = () => {
   );
 };
 
-WalletConnectButton.displayName = "WalletConnectButton";
+WalletConnectButton.displayName = 'WalletConnectButton';

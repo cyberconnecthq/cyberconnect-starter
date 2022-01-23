@@ -5,7 +5,9 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  padding: 0 50px;
 }
+
 .logo {
   width: 500px;
   height: 500px;
@@ -14,50 +16,57 @@
 
 .discription {
   text-align: center;
-  width: 800px;
   position: relative;
   margin-top: -100px;
+  color: rgb(0, 0, 0, 0.7);
+  line-height: 20px;
 }
 
-.userInfo {
+.link {
+  color: #0070f3;
+  text-decoration: underline;
+}
+
+.searchSection {
+  width: 100%;
+  max-width: 520px;
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin: auto;
 }
 
 .inputContainer {
+  width: 100%;
+  display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .isFollowed {
-  margin-right: 290px;
+  width: 100%;
   margin-top: 10px;
 }
 
 .error {
+  width: 100%;
   color: rgb(160, 101, 101);
-  margin-right: 300px;
   margin-top: 10px;
 }
 
 .listsContainer {
   display: flex;
-  flex-direction: row;
   justify-content: center;
   position: relative;
+  flex-wrap: wrap;
 }
 
 .loadingButton {
   margin-left: 15px;
   height: 55px;
 }
-
-/* .loadingButton:hover {
-  color: black;
-  border: 2px solid black;
-} */
 
 .list {
   border: 1px solid gray;
@@ -71,19 +80,11 @@
   height: 500px;
 }
 
-.followersList {
+.followList {
   overflow: auto;
   width: 250px;
-  height: 400px;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.followingsList {
-  overflow: auto;
-  width: 250px;
-  height: 400px;
+  height: 100%;
+  flex: auto;
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -95,7 +96,8 @@
 }
 
 .textField {
-  width: 420px;
+  flex: auto;
+  width: 100%;
   text-align: center;
 }
 
@@ -112,4 +114,15 @@
 
 .userAddress {
   font-weight: bold;
+}
+
+@media (max-width: 500px) {
+  .logo {
+    width: 325px;
+    height: 325px;
+  }
+
+  .discription {
+    margin-top: -50px;
+  }
 }
