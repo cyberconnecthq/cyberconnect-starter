@@ -214,7 +214,11 @@ const Home: NextPage = () => {
       <div className={styles.discription}>
         <p>
           This is a{' '}
-          <a className={styles.link} href="https://docs.cyberconnect.me/">
+          <a
+            className={styles.link}
+            href="https://docs.cyberconnect.me/"
+            target="_blank"
+          >
             CyberConnect
           </a>{' '}
           starter app. You can freely use it as a base for your application.{' '}

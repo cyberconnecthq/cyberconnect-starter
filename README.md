@@ -1,6 +1,6 @@
 This is an example application that uses [CyberConnect API](https://docs.cyberconnect.me/), based on [Next.js](https://nextjs.org/).
 
-Deployed to https://brave-yonath-d211b4.netlify.app/ via [Netlify](https://www.netlify.com/)
+Deployed to https://cyberconnect-start.netlify.app/ via [Netlify](https://www.netlify.com/)
 
 Fork it freely.
 

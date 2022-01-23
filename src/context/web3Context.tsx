@@ -55,7 +55,7 @@ export const Web3ContextProvider: React.FC = ({ children }) => {
 
     setAddress(address);
     setEns(ens);
-    initCyberConnect(provider.provider);
+    initCyberConnect(provider);
   }, [initCyberConnect]);
 
   return (
