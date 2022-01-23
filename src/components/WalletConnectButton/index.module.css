@@ -1,13 +1,7 @@
-.userAddress {
-  font-weight: bold;
-  padding: 1rem;
-}
-
-.connectWalletButton {
+.container .connectWalletButton {
   background-color: #000000;
   border: 2px solid #1a1a1a;
   border-radius: 15px;
-  box-sizing: border-box;
   color: #ffffff;
   font-size: 16px;
   font-weight: 600;
@@ -19,16 +13,16 @@
   will-change: transform;
 }
 
-.connectWalletButton:disabled {
-  pointer-events: none;
-}
-
-.connectWalletButton:hover {
+.container .connectWalletButton:hover {
   transform: translateY(-2px);
-  color: #000000;
 }
 
-.connectWalletButton:active {
+.container .connectWalletButton:active {
   box-shadow: none;
   transform: translateY(0);
+}
+
+.container .userAddress {
+  font-weight: bold;
+  padding: 1rem;
 }

@@ -3,7 +3,6 @@
   min-height: 100vh;
   display: flex;
   align-items: center;
-  justify-content: center;
   flex-direction: column;
   padding: 0 50px;
 }
@@ -35,7 +34,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: auto;
+  margin: 0 auto;
 }
 
 .inputContainer {

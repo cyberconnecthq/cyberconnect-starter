@@ -15,7 +15,7 @@ export const WalletConnectButton: React.FC = () => {
   }, [connectWallet]);
 
   return (
-    <>
+    <div className={styles.container}>
       {!address ? (
         <LoadingButton
           loading={loading}
@@ -34,7 +34,7 @@ export const WalletConnectButton: React.FC = () => {
           Your Address: {ens || formatAddress(address)}
         </div>
       )}
-    </>
+    </div>
   );
 };
 

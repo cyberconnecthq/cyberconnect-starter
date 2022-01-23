@@ -13,7 +13,6 @@
     "@emotion/styled": "^11.6.0",
     "@mui/lab": "^5.0.0-alpha.64",
     "@mui/material": "^5.2.8",
-    "@walletconnect/web3-provider": "^1.7.1",
     "ethers": "^5.5.3",
     "next": "12.0.7",
     "react": "17.0.2",

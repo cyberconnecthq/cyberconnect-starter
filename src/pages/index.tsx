@@ -204,10 +204,11 @@ const Home: NextPage = () => {
   return (
     <div className={styles.container}>
       <div className={styles.logo}>
-        <Image
+        <img
           src="/cyberconnect-logo.png"
           alt="CyberConnect Logo"
-          layout="fill"
+          width="100%"
+          height="100%"
         />
       </div>
       <div className={styles.discription}>
@@ -220,7 +221,7 @@ const Home: NextPage = () => {
         </p>
         <p>
           This app displays the current user&apos;s followings and followers. It
-          also allows the user to follow/unfollow a wallet addres
+          also allows the user to follow/unfollow a wallet address.
         </p>
         <p>Try it yourself!</p>
       </div>
