@@ -47,3 +47,8 @@ export interface SearchUserInfoResp {
     avatar: string;
   };
 }
+
+export enum Network {
+  ETH = 'ETH',
+  SOLANA = 'SOLANA',
+}

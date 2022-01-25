@@ -18,11 +18,11 @@ export const followListInfoSchema = ({
 }: FollowListInfoArgs) => {
   return {
     operationName: 'followListInfo',
-    query: `query followListInfo($address: String!, $namespace: String, $network: String, $followingFirst: Int, $followingAfter: String, $followerFirst: Int, $followerAfter: String) {
+    query: `query followListInfo($address: String!, $namespace: String, $network: Network, $followingFirst: Int, $followingAfter: String, $followerFirst: Int, $followerAfter: String) {
       identity(address: $address, network: $network) {
-        followingCount(namespace: $namespace, network: $network)
-        followerCount(namespace: $namespace, network: $network)
-        followings(namespace: $namespace, network: $network, first: $followingFirst, after: $followingAfter) {
+        followingCount(namespace: $namespace)
+        followerCount(namespace: $namespace)
+        followings(namespace: $namespace, first: $followingFirst, after: $followingAfter) {
           pageInfo {
             endCursor
             hasNextPage
@@ -33,7 +33,7 @@ export const followListInfoSchema = ({
             avatar
           }
         }
-        followers(namespace: $namespace, network: $network, first: $followerFirst, after: $followerAfter) {
+        followers(namespace: $namespace, first: $followerFirst, after: $followerAfter) {
           pageInfo {
             endCursor
             hasNextPage
@@ -66,7 +66,7 @@ export const searchUserInfoSchema = ({
 }: SearchUserInfoArgs) => {
   return {
     operationName: 'searchUserInfo',
-    query: `query searchUserInfo($fromAddr: String!, $toAddr: String!, $namespace: String, $network: String) {
+    query: `query searchUserInfo($fromAddr: String!, $toAddr: String!, $namespace: String, $network: Network) {
       identity(address: $toAddr, network: $network) {
         address
         ens

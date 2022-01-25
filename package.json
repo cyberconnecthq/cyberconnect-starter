@@ -1,5 +1,5 @@
 {
-  "name": "api-demo",
+  "name": "cyberconnect-starter",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -8,7 +8,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@cyberlab/cyberconnect": "^4.1.10",
+    "@cyberlab/cyberconnect": "^4.2.0",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
     "@mui/lab": "^5.0.0-alpha.64",

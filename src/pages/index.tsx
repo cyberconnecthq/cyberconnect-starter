@@ -8,15 +8,14 @@ import MuiAlert from '@mui/material/Alert';
 import Avatar from '@mui/material/Avatar';
 import LoadingButton from '@mui/lab/LoadingButton';
 import TextField from '@mui/material/TextField';
-import Image from 'next/image';
 
 import { followListInfoQuery, searchUserInfoQuery } from '@/utils/query';
-import { FollowListInfoResp, SearchUserInfoResp } from '@/utils/types';
+import { FollowListInfoResp, SearchUserInfoResp, Network } from '@/utils/types';
 import { formatAddress, removeDuplicate, isValidAddr } from '@/utils/helper';
 import { useWeb3 } from '@/context/web3Context';
 
 const NAME_SPACE = 'CyberConnect';
-const NETWORK = 'ethereum';
+const NETWORK = Network.ETH;
 const FIRST = 10; // The number of users in followings/followers list for each fetch
 
 const Home: NextPage = () => {
