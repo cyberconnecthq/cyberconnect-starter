@@ -49,83 +49,88 @@ const Home: NextPage = () => {
       return;
     }
 
-    setFollowLoading(true);
+    try {
+      setFollowLoading(true);
 
-    // Execute connect if the current user is not following the search addrress.
-    if (!searchAddrInfo.followStatus.isFollowing) {
-      await cyberConnect.connect(searchInput);
+      // Execute connect if the current user is not following the search addrress.
+      if (!searchAddrInfo.followStatus.isFollowing) {
+        await cyberConnect.connect(searchInput);
 
-      // Overwrite the local status of isFollowing
-      setSearchAddrInfo((prev) => {
-        return !!prev
-          ? {
-              ...prev,
-              followStatus: {
-                ...prev.followStatus,
-                isFollowing: true,
-              },
-            }
-          : prev;
-      });
+        // Overwrite the local status of isFollowing
+        setSearchAddrInfo((prev) => {
+          return !!prev
+            ? {
+                ...prev,
+                followStatus: {
+                  ...prev.followStatus,
+                  isFollowing: true,
+                },
+              }
+            : prev;
+        });
 
-      // Add the new following to the current user followings list
-      setFollowListInfo((prev) => {
-        return !!prev
-          ? {
-              ...prev,
-              followingCount: prev.followingCount + 1,
-              followings: {
-                ...prev.followings,
-                list: removeDuplicate(
-                  prev.followings.list.concat([searchAddrInfo.identity])
-                ),
-              },
-            }
-          : prev;
-      });
+        // Add the new following to the current user followings list
+        setFollowListInfo((prev) => {
+          return !!prev
+            ? {
+                ...prev,
+                followingCount: prev.followingCount + 1,
+                followings: {
+                  ...prev.followings,
+                  list: removeDuplicate(
+                    prev.followings.list.concat([searchAddrInfo.identity])
+                  ),
+                },
+              }
+            : prev;
+        });
 
-      setSnackbarText('Follow Success!');
-    } else {
-      await cyberConnect.disconnect(searchInput);
+        setSnackbarText('Follow Success!');
+      } else {
+        await cyberConnect.disconnect(searchInput);
 
-      setSearchAddrInfo((prev) => {
-        return !!prev
-          ? {
-              ...prev,
-              followStatus: {
-                ...prev.followStatus,
-                isFollowing: false,
-              },
-            }
-          : prev;
-      });
+        setSearchAddrInfo((prev) => {
+          return !!prev
+            ? {
+                ...prev,
+                followStatus: {
+                  ...prev.followStatus,
+                  isFollowing: false,
+                },
+              }
+            : prev;
+        });
 
-      setFollowListInfo((prev) => {
-        return !!prev
-          ? {
-              ...prev,
-              followingCount: prev.followingCount - 1,
-              followings: {
-                ...prev.followings,
-                list: prev.followings.list.filter((user) => {
-                  return user.address !== searchAddrInfo.identity.address;
-                }),
-              },
-            }
-          : prev;
-      });
+        setFollowListInfo((prev) => {
+          return !!prev
+            ? {
+                ...prev,
+                followingCount: prev.followingCount - 1,
+                followings: {
+                  ...prev.followings,
+                  list: prev.followings.list.filter((user) => {
+                    return user.address !== searchAddrInfo.identity.address;
+                  }),
+                },
+              }
+            : prev;
+        });
 
-      setSnackbarText('Unfollow Success!');
+        setSnackbarText('Unfollow Success!');
+      }
+
+      setSnackbarOpen(true);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setFollowLoading(false);
     }
-
-    setSnackbarOpen(true);
-    setFollowLoading(false);
   };
 
   const handleInputChange = async (value: string) => {
     setSearchInput(value);
 
-    if (isValidAddr(value) && address) {
+    if (isValidAddr(value) && address && address === searchInput) {
       setSearchLoading(true);
       await fetchSearchAddrInfo(value);
     }
@@ -239,7 +244,12 @@ const Home: NextPage = () => {
             />
             <LoadingButton
               onClick={handleFollow}
-              disabled={searchLoading || !isValidAddr(searchInput) || !address}
+              disabled={
+                searchLoading ||
+                !isValidAddr(searchInput) ||
+                !address ||
+                address === searchInput
+              }
               loading={followLoading}
               className={styles.loadingButton}
             >
@@ -248,15 +258,17 @@ const Home: NextPage = () => {
                 : 'Unfollow'}
             </LoadingButton>
           </div>
-          {isValidAddr(searchInput) ? (
+          {!isValidAddr(searchInput) ? (
+            <div className={styles.error}>Please enter a valid address.</div>
+          ) : address === searchInput ? (
+            <div className={styles.error}>You can’t follow yourself : )</div>
+          ) : (
             <div className={styles.isFollowed}>
               This user{' '}
               {searchAddrInfo?.followStatus.isFollowed
                 ? 'is following you'
                 : 'has not followed you yet'}
             </div>
-          ) : (
-            <div className={styles.error}>Please enter a valid address.</div>
           )}
         </div>
       )}
