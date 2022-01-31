@@ -130,7 +130,7 @@ const Home: NextPage = () => {
   const handleInputChange = async (value: string) => {
     setSearchInput(value);
 
-    if (isValidAddr(value) && address && address === searchInput) {
+    if (isValidAddr(value) && address && address !== searchInput) {
       setSearchLoading(true);
       await fetchSearchAddrInfo(value);
     }
