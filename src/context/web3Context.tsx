@@ -2,6 +2,10 @@ import React, { useState, useEffect, useContext, useCallback } from 'react';
 import Web3Modal from 'web3modal';
 import { ethers } from 'ethers';
 import CyberConnect from '@cyberlab/cyberconnect';
+import { useProvider, useContext as wUserContext } from 'wagmi';
+import WalletConnectProvider from '@walletconnect/web3-provider';
+
+import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 
 interface Web3ContextInterface {
   connectWallet: () => Promise<void>;
@@ -21,6 +25,16 @@ export const Web3ContextProvider: React.FC = ({ children }) => {
   const [address, setAddress] = useState<string>('');
   const [ens, setEns] = useState<string | null>('');
   const [cyberConnect, setCyberConnect] = useState<CyberConnect | null>(null);
+  // const provider = useProvider();
+  // const context = wUserContext();
+
+  const connector = new WalletConnectConnector({
+    options: {
+      qrcode: true,
+    },
+  });
+
+  // console.log(provider.prov[1].);
 
   async function getEnsByAddress(
     provider: ethers.providers.Web3Provider,
@@ -43,12 +57,22 @@ export const Web3ContextProvider: React.FC = ({ children }) => {
     const web3Modal = new Web3Modal({
       network: 'mainnet',
       cacheProvider: true,
-      providerOptions: {},
+      providerOptions: {
+        walletconnect: {
+          package: WalletConnectProvider, // required
+          options: {
+            infuraId: 'd8759fe1122e4b19bdf7277a2771e1fb', // required
+          },
+        },
+      },
     });
 
     const instance = await web3Modal.connect();
 
     const provider = new ethers.providers.Web3Provider(instance);
+    // const provider1 = context.state.connector?.getProvider();
+    console.log(provider);
+    // console.log(provider1);
     const signer = provider.getSigner();
     const address = await signer.getAddress();
     const ens = await getEnsByAddress(provider, address);

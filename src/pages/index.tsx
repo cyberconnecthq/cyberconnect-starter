@@ -39,12 +39,15 @@ const Home: NextPage = () => {
       namespace: NAME_SPACE,
       network: NETWORK,
     });
+    console.log(resp);
     if (resp) {
       setSearchAddrInfo(resp);
     }
   };
 
   const handleFollow = async () => {
+    console.log(cyberConnect);
+    console.log(searchAddrInfo);
     if (!cyberConnect || !searchAddrInfo) {
       return;
     }
@@ -52,10 +55,14 @@ const Home: NextPage = () => {
     try {
       setFollowLoading(true);
 
+      console.log('1');
+
       // Execute connect if the current user is not following the search addrress.
       if (!searchAddrInfo.followStatus.isFollowing) {
+        console.log('2');
         await cyberConnect.connect(searchInput);
 
+        console.log('3');
         // Overwrite the local status of isFollowing
         setSearchAddrInfo((prev) => {
           return !!prev
@@ -130,7 +137,7 @@ const Home: NextPage = () => {
   const handleInputChange = async (value: string) => {
     setSearchInput(value);
 
-    if (isValidAddr(value) && address && address === searchInput) {
+    if (isValidAddr(value) && address && address !== searchInput) {
       setSearchLoading(true);
       await fetchSearchAddrInfo(value);
     }
