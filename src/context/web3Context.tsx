@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, useCallback } from 'react';
 import Web3Modal from 'web3modal';
 import { ethers } from 'ethers';
 import CyberConnect from '@cyberlab/cyberconnect';
-import { useProvider, useContext as wUserContext } from 'wagmi';
+import { useProvider, useContext as wUserContext, useConnect } from 'wagmi';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
@@ -26,7 +26,8 @@ export const Web3ContextProvider: React.FC = ({ children }) => {
   const [ens, setEns] = useState<string | null>('');
   const [cyberConnect, setCyberConnect] = useState<CyberConnect | null>(null);
   // const provider = useProvider();
-  // const context = wUserContext();
+  const context = wUserContext();
+  const [{ data, error }, connect] = useConnect();
 
   const connector = new WalletConnectConnector({
     options: {
@@ -54,6 +55,12 @@ export const Web3ContextProvider: React.FC = ({ children }) => {
   }, []);
 
   const connectWallet = React.useCallback(async () => {
+    console.log(data.connectors);
+
+    const mConnect = data.connectors[1];
+
+    await connect(mConnect);
+
     const web3Modal = new Web3Modal({
       network: 'mainnet',
       cacheProvider: true,
@@ -67,19 +74,20 @@ export const Web3ContextProvider: React.FC = ({ children }) => {
       },
     });
 
-    const instance = await web3Modal.connect();
+    // const instance = await web3Modal.connect();
+    // await connect(data.connectors[0]);
 
-    const provider = new ethers.providers.Web3Provider(instance);
-    // const provider1 = context.state.connector?.getProvider();
-    console.log(provider);
-    // console.log(provider1);
-    const signer = provider.getSigner();
-    const address = await signer.getAddress();
-    const ens = await getEnsByAddress(provider, address);
+    // const provider = new ethers.providers.Web3Provider(instance);
+    const provider1 = mConnect.getProvider();
+    // console.log(provider);
+    console.log('wagmi provider: ', provider1);
+    // const signer = provider1.signer;
+    const address = await provider1.accounts[0];
+    // const ens = await getEnsByAddress(provider1, address);
 
     setAddress(address);
     setEns(ens);
-    initCyberConnect(provider);
+    initCyberConnect(provider1);
   }, [initCyberConnect]);
 
   return (
