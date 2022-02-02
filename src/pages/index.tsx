@@ -46,8 +46,6 @@ const Home: NextPage = () => {
   };
 
   const handleFollow = async () => {
-    console.log(cyberConnect);
-    console.log(searchAddrInfo);
     if (!cyberConnect || !searchAddrInfo) {
       return;
     }
@@ -55,14 +53,10 @@ const Home: NextPage = () => {
     try {
       setFollowLoading(true);
 
-      console.log('1');
-
       // Execute connect if the current user is not following the search addrress.
       if (!searchAddrInfo.followStatus.isFollowing) {
-        console.log('2');
         await cyberConnect.connect(searchInput);
 
-        console.log('3');
         // Overwrite the local status of isFollowing
         setSearchAddrInfo((prev) => {
           return !!prev

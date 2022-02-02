@@ -453,9 +453,10 @@
     caip "^0.9.2"
     cross-fetch "^3.1.4"
 
-"@cyberlab/cyberconnect@file:cyberlab-cyberconnect-4.2.4.tgz":
-  version "4.2.4"
-  resolved "file:cyberlab-cyberconnect-4.2.4.tgz#4290094cc1ff489e4c51d6994c8ea63c8facf194"
+"@cyberlab/cyberconnect@^4.2.1":
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/@cyberlab/cyberconnect/-/cyberconnect-4.2.1.tgz#931e3b287e7ce34cfa4a9436e9a39a49111a3f0d"
+  integrity sha512-8pQlf1oQmQKMmXseinRDzEaDAa12vbIeMlGesSEX86L35bEVN3G9X8+IhfWhrarMdWpPDWNfR8ajWhMRYrI3HQ==
   dependencies:
     "3id-did-provider" "^1.1.1"
     "@3id/connect" "^0.2.5"

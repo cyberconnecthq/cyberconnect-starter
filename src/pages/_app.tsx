@@ -15,7 +15,7 @@ const connectors = ({ chainId }: any) => {
     // }),
     new WalletConnectConnector({
       options: {
-        infuraId: 'd8759fe1122e4b19bdf7277a2771e1fb',
+        infuraId: 'infuraId',
         qrcode: true,
       },
     }),
