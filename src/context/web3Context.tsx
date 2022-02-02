@@ -57,37 +57,23 @@ export const Web3ContextProvider: React.FC = ({ children }) => {
   const connectWallet = React.useCallback(async () => {
     console.log(data.connectors);
 
-    const mConnect = data.connectors[1];
+    const mConnect = data.connectors[0];
 
     await connect(mConnect);
 
-    const web3Modal = new Web3Modal({
-      network: 'mainnet',
-      cacheProvider: true,
-      providerOptions: {
-        walletconnect: {
-          package: WalletConnectProvider, // required
-          options: {
-            infuraId: 'd8759fe1122e4b19bdf7277a2771e1fb', // required
-          },
-        },
-      },
-    });
-
-    // const instance = await web3Modal.connect();
-    // await connect(data.connectors[0]);
-
-    // const provider = new ethers.providers.Web3Provider(instance);
-    const provider1 = mConnect.getProvider();
+    const provider = mConnect.getProvider();
     // console.log(provider);
-    console.log('wagmi provider: ', provider1);
+    console.log('wagmi provider: ', provider);
+    const addr = await provider.enable();
+
     // const signer = provider1.signer;
-    const address = await provider1.accounts[0];
+    const address = addr[0];
+    console.log('addr: ', addr);
     // const ens = await getEnsByAddress(provider1, address);
 
     setAddress(address);
     setEns(ens);
-    initCyberConnect(provider1);
+    initCyberConnect(provider);
   }, [initCyberConnect]);
 
   return (

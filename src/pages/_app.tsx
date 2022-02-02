@@ -9,10 +9,10 @@ import { chain, defaultChains } from 'wagmi';
 
 const connectors = ({ chainId }: any) => {
   return [
-    new InjectedConnector({
-      chains: defaultChains,
-      // options: { shimDisconnect: true },
-    }),
+    // new InjectedConnector({
+    //   chains: defaultChains,
+    //   // options: { shimDisconnect: true },
+    // }),
     new WalletConnectConnector({
       options: {
         infuraId: 'd8759fe1122e4b19bdf7277a2771e1fb',
