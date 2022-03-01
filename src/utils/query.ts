@@ -3,9 +3,9 @@ import {
   SearchUserInfoArgs,
   FollowListInfoResp,
   SearchUserInfoResp,
-} from './types';
+} from "./types";
 
-const endPoint = 'https://api.cybertino.io/connect/';
+const endPoint = "https://api.cybertino.io/connect/";
 
 export const followListInfoSchema = ({
   address,
@@ -17,7 +17,7 @@ export const followListInfoSchema = ({
   followerAfter,
 }: FollowListInfoArgs) => {
   return {
-    operationName: 'followListInfo',
+    operationName: "followListInfo",
     query: `query followListInfo($address: String!, $namespace: String, $network: Network, $followingFirst: Int, $followingAfter: String, $followerFirst: Int, $followerAfter: String) {
       identity(address: $address, network: $network) {
         followingCount(namespace: $namespace)
@@ -61,26 +61,26 @@ export const followListInfoSchema = ({
 export const searchUserInfoSchema = ({
   fromAddr,
   toAddr,
-  namespace,
   network,
 }: SearchUserInfoArgs) => {
   return {
-    operationName: 'searchUserInfo',
-    query: `query searchUserInfo($fromAddr: String!, $toAddr: String!, $namespace: String, $network: Network) {
+    operationName: "searchUserInfo",
+    query: `query searchUserInfo($fromAddr: String!, $toAddr: String!, $network: Network) {
       identity(address: $toAddr, network: $network) {
         address
         ens
         avatar
       }
-      followStatus(fromAddr: $fromAddr, toAddr: $toAddr, namespace: $namespace, network: $network) {
-        isFollowed
-        isFollowing
+      connections(fromAddr: $fromAddr, toAddrList: [$toAddr], network: $network) {
+        followStatus {
+          isFollowed
+          isFollowing
+        }
       }
     }`,
     variables: {
       fromAddr,
       toAddr,
-      namespace,
       network,
     },
   };
@@ -91,16 +91,16 @@ export const querySchemas = {
   searchUserInfo: searchUserInfoSchema,
 };
 
-export const request = async (url = '', data = {}) => {
+export const request = async (url = "", data = {}) => {
   // Default options are marked with *
   const response = await fetch(url, {
-    method: 'POST',
-    mode: 'cors',
-    cache: 'no-cache',
+    method: "POST",
+    mode: "cors",
+    cache: "no-cache",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    referrerPolicy: 'no-referrer',
+    referrerPolicy: "no-referrer",
     body: JSON.stringify(data),
   });
 
@@ -127,7 +127,7 @@ export const followListInfoQuery = async ({
   followerFirst,
   followerAfter,
 }: FollowListInfoArgs) => {
-  const schema = querySchemas['followListInfo']({
+  const schema = querySchemas["followListInfo"]({
     address,
     namespace,
     network,
@@ -144,13 +144,11 @@ export const followListInfoQuery = async ({
 export const searchUserInfoQuery = async ({
   fromAddr,
   toAddr,
-  namespace,
   network,
 }: SearchUserInfoArgs) => {
-  const schema = querySchemas['searchUserInfo']({
+  const schema = querySchemas["searchUserInfo"]({
     fromAddr,
     toAddr,
-    namespace,
     network,
   });
   const resp = await handleQuery(schema, endPoint);

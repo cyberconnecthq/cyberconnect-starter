@@ -1,29 +1,29 @@
-import type { NextPage } from 'next';
-import styles from './index.module.css';
-import { WalletConnectButton } from '@/components';
-import { useEffect, useState } from 'react';
+import type { NextPage } from "next";
+import styles from "./index.module.css";
+import { WalletConnectButton } from "@/components";
+import { useEffect, useState } from "react";
 
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert from '@mui/material/Alert';
-import Avatar from '@mui/material/Avatar';
-import LoadingButton from '@mui/lab/LoadingButton';
-import TextField from '@mui/material/TextField';
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+import Avatar from "@mui/material/Avatar";
+import LoadingButton from "@mui/lab/LoadingButton";
+import TextField from "@mui/material/TextField";
 
-import { followListInfoQuery, searchUserInfoQuery } from '@/utils/query';
-import { FollowListInfoResp, SearchUserInfoResp, Network } from '@/utils/types';
-import { formatAddress, removeDuplicate, isValidAddr } from '@/utils/helper';
-import { useWeb3 } from '@/context/web3Context';
+import { followListInfoQuery, searchUserInfoQuery } from "@/utils/query";
+import { FollowListInfoResp, SearchUserInfoResp, Network } from "@/utils/types";
+import { formatAddress, removeDuplicate, isValidAddr } from "@/utils/helper";
+import { useWeb3 } from "@/context/web3Context";
 
-const NAME_SPACE = 'CyberConnect';
+const NAME_SPACE = "CyberConnect";
 const NETWORK = Network.ETH;
 const FIRST = 10; // The number of users in followings/followers list for each fetch
 
 const Home: NextPage = () => {
   const { address, cyberConnect } = useWeb3();
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
-  const [snackbarText, setSnackbarText] = useState<string>('');
+  const [snackbarText, setSnackbarText] = useState<string>("");
 
-  const [searchInput, setSearchInput] = useState<string>('');
+  const [searchInput, setSearchInput] = useState<string>("");
   const [searchAddrInfo, setSearchAddrInfo] =
     useState<SearchUserInfoResp | null>(null);
   const [searchLoading, setSearchLoading] = useState<boolean>(false);
@@ -36,7 +36,6 @@ const Home: NextPage = () => {
     const resp = await searchUserInfoQuery({
       fromAddr: address,
       toAddr,
-      namespace: NAME_SPACE,
       network: NETWORK,
     });
     if (resp) {
@@ -53,7 +52,7 @@ const Home: NextPage = () => {
       setFollowLoading(true);
 
       // Execute connect if the current user is not following the search addrress.
-      if (!searchAddrInfo.followStatus.isFollowing) {
+      if (!searchAddrInfo.connections[0].followStatus.isFollowing) {
         await cyberConnect.connect(searchInput);
 
         // Overwrite the local status of isFollowing
@@ -61,10 +60,14 @@ const Home: NextPage = () => {
           return !!prev
             ? {
                 ...prev,
-                followStatus: {
-                  ...prev.followStatus,
-                  isFollowing: true,
-                },
+                connections: [
+                  {
+                    followStatus: {
+                      ...prev.connections[0].followStatus,
+                      isFollowing: true,
+                    },
+                  },
+                ],
               }
             : prev;
         });
@@ -85,7 +88,7 @@ const Home: NextPage = () => {
             : prev;
         });
 
-        setSnackbarText('Follow Success!');
+        setSnackbarText("Follow Success!");
       } else {
         await cyberConnect.disconnect(searchInput);
 
@@ -93,10 +96,14 @@ const Home: NextPage = () => {
           return !!prev
             ? {
                 ...prev,
-                followStatus: {
-                  ...prev.followStatus,
-                  isFollowing: false,
-                },
+                connections: [
+                  {
+                    followStatus: {
+                      ...prev.connections[0].followStatus,
+                      isFollowing: false,
+                    },
+                  },
+                ],
               }
             : prev;
         });
@@ -116,7 +123,7 @@ const Home: NextPage = () => {
             : prev;
         });
 
-        setSnackbarText('Unfollow Success!');
+        setSnackbarText("Unfollow Success!");
       }
 
       setSnackbarOpen(true);
@@ -155,13 +162,13 @@ const Home: NextPage = () => {
     }
   };
 
-  const fetchMore = async (type: 'followings' | 'followers') => {
+  const fetchMore = async (type: "followings" | "followers") => {
     if (!address || !followListInfo) {
       return;
     }
 
     const params =
-      type === 'followers'
+      type === "followers"
         ? {
             address,
             namespace: NAME_SPACE,
@@ -179,7 +186,7 @@ const Home: NextPage = () => {
 
     const resp = await followListInfoQuery(params);
     if (resp) {
-      type === 'followers'
+      type === "followers"
         ? setFollowListInfo({
             ...followListInfo,
             followers: {
@@ -217,15 +224,15 @@ const Home: NextPage = () => {
       </div>
       <div className={styles.discription}>
         <p>
-          This is a{' '}
+          This is a{" "}
           <a
             className={styles.link}
             href="https://docs.cyberconnect.me/"
             target="_blank"
           >
             CyberConnect
-          </a>{' '}
-          starter app. You can freely use it as a base for your application.{' '}
+          </a>{" "}
+          starter app. You can freely use it as a base for your application.{" "}
         </p>
         <p>
           This app displays the current user&apos;s followings and followers. It
@@ -253,9 +260,9 @@ const Home: NextPage = () => {
               loading={followLoading}
               className={styles.loadingButton}
             >
-              {!searchAddrInfo?.followStatus.isFollowing
-                ? 'Follow'
-                : 'Unfollow'}
+              {!searchAddrInfo?.connections[0].followStatus.isFollowing
+                ? "Follow"
+                : "Unfollow"}
             </LoadingButton>
           </div>
           {!isValidAddr(searchInput) ? (
@@ -264,10 +271,10 @@ const Home: NextPage = () => {
             <div className={styles.error}>You can’t follow yourself : )</div>
           ) : (
             <div className={styles.isFollowed}>
-              This user{' '}
-              {searchAddrInfo?.followStatus.isFollowed
-                ? 'is following you'
-                : 'has not followed you yet'}
+              This user{" "}
+              {searchAddrInfo?.connections[0].followStatus.isFollowed
+                ? "is following you"
+                : "has not followed you yet"}
             </div>
           )}
         </div>
@@ -276,7 +283,7 @@ const Home: NextPage = () => {
         <div className={styles.listsContainer}>
           <div className={styles.list}>
             <div className={styles.subtitle}>
-              You have <strong>{followListInfo.followerCount}</strong>{' '}
+              You have <strong>{followListInfo.followerCount}</strong>{" "}
               followers:
             </div>
             <div className={styles.followList}>
@@ -291,7 +298,7 @@ const Home: NextPage = () => {
                 );
               })}
               {followListInfo.followers.pageInfo.hasNextPage && (
-                <LoadingButton onClick={() => fetchMore('followers')}>
+                <LoadingButton onClick={() => fetchMore("followers")}>
                   See More
                 </LoadingButton>
               )}
@@ -299,7 +306,7 @@ const Home: NextPage = () => {
           </div>
           <div className={styles.list}>
             <div className={styles.subtitle}>
-              You have <strong>{followListInfo.followingCount}</strong>{' '}
+              You have <strong>{followListInfo.followingCount}</strong>{" "}
               followings:
             </div>
             <div className={styles.followList}>
@@ -314,7 +321,7 @@ const Home: NextPage = () => {
                 );
               })}
               {followListInfo.followings.pageInfo.hasNextPage && (
-                <LoadingButton onClick={() => fetchMore('followings')}>
+                <LoadingButton onClick={() => fetchMore("followings")}>
                   See More
                 </LoadingButton>
               )}
@@ -330,7 +337,7 @@ const Home: NextPage = () => {
         <MuiAlert
           onClose={() => setSnackbarOpen(false)}
           severity="success"
-          sx={{ width: '100%' }}
+          sx={{ width: "100%" }}
         >
           {snackbarText}
         </MuiAlert>

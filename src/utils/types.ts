@@ -11,7 +11,6 @@ export interface FollowListInfoArgs {
 export interface SearchUserInfoArgs {
   fromAddr: string;
   toAddr: string;
-  namespace?: string;
   network?: string;
 }
 
@@ -37,10 +36,12 @@ export interface FollowListInfoResp {
 }
 
 export interface SearchUserInfoResp {
-  followStatus: {
-    isFollowing: boolean;
-    isFollowed: boolean;
-  };
+  connections: {
+    followStatus: {
+      isFollowing: boolean;
+      isFollowed: boolean;
+    };
+  }[];
   identity: {
     ens: string;
     address: string;
@@ -49,6 +50,6 @@ export interface SearchUserInfoResp {
 }
 
 export enum Network {
-  ETH = 'ETH',
-  SOLANA = 'SOLANA',
+  ETH = "ETH",
+  SOLANA = "SOLANA",
 }
