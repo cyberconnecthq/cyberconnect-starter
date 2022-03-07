@@ -292,7 +292,7 @@ const Home: NextPage = () => {
                   <div key={user.address} className={styles.user}>
                     <Avatar src={user.avatar} className={styles.avatar} />
                     <div className={styles.userAddress}>
-                      {user.ens || formatAddress(user.address)}
+                      {user.domain || formatAddress(user.address)}
                     </div>
                   </div>
                 );
@@ -315,7 +315,7 @@ const Home: NextPage = () => {
                   <div key={user.address} className={styles.user}>
                     <Avatar src={user.avatar} className={styles.avatar} />
                     <div className={styles.userAddress}>
-                      {user.ens || formatAddress(user.address)}
+                      {user.domain || formatAddress(user.address)}
                     </div>
                   </div>
                 );

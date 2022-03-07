@@ -15,7 +15,7 @@ export interface SearchUserInfoArgs {
 }
 
 export interface BasicUserInfo {
-  ens: string;
+  domain: string;
   address: string;
   avatar: string;
 }
@@ -43,7 +43,7 @@ export interface SearchUserInfoResp {
     };
   }[];
   identity: {
-    ens: string;
+    domain: string;
     address: string;
     avatar: string;
   };

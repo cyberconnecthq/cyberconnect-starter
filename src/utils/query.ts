@@ -29,7 +29,7 @@ export const followListInfoSchema = ({
           }
           list {
             address
-            ens
+            domain
             avatar
           }
         }
@@ -40,7 +40,7 @@ export const followListInfoSchema = ({
           }
           list {
             address
-            ens
+            domain
             avatar
           }
         }
@@ -68,7 +68,7 @@ export const searchUserInfoSchema = ({
     query: `query searchUserInfo($fromAddr: String!, $toAddr: String!, $network: Network) {
       identity(address: $toAddr, network: $network) {
         address
-        ens
+        domain
         avatar
       }
       connections(fromAddr: $fromAddr, toAddrList: [$toAddr], network: $network) {
