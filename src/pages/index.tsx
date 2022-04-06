@@ -260,7 +260,7 @@ const Home: NextPage = () => {
               loading={followLoading}
               className={styles.loadingButton}
             >
-              {!searchAddrInfo?.connections[0].followStatus.isFollowing
+              {!searchAddrInfo?.connections[0]?.followStatus.isFollowing
                 ? "Follow"
                 : "Unfollow"}
             </LoadingButton>
