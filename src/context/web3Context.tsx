@@ -1,70 +1,44 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
-import Web3Modal from 'web3modal';
-import { ethers } from 'ethers';
-import CyberConnect from '@cyberlab/cyberconnect';
+import CyberConnect from "@cyberlab/cyberconnect";
+import { ethers } from "ethers";
+import React, { useCallback, useContext, useEffect, useState } from "react";
+import { useAccount, useProvider, useSigner } from "wagmi";
+import { useQuery } from "@apollo/client";
+import { Identity } from "../types/identity";
+import { GET_IDENTITY } from "@/queries/GetIdentity";
 
 interface Web3ContextInterface {
-  connectWallet: () => Promise<void>;
-  address: string;
-  ens: string | null;
-  cyberConnect: CyberConnect | null;
+  address: string | any;
+  identity: Identity | null;
 }
 
+// create Context to pass data to different components
 export const Web3Context = React.createContext<Web3ContextInterface>({
-  connectWallet: async () => undefined,
-  address: '',
-  ens: '',
-  cyberConnect: null,
+  address: "", // user's signed in address
+  identity: null,
 });
 
 export const Web3ContextProvider: React.FC = ({ children }) => {
-  const [address, setAddress] = useState<string>('');
-  const [ens, setEns] = useState<string | null>('');
-  const [cyberConnect, setCyberConnect] = useState<CyberConnect | null>(null);
+  const { address, isConnecting, isDisconnected } = useAccount();
+  const [identity, setIdentity] = useState<Identity | null>(null);
 
-  async function getEnsByAddress(
-    provider: ethers.providers.Web3Provider,
-    address: string
-  ) {
-    const ens = await provider.lookupAddress(address);
-    return ens;
-  }
+  //Fetch IdentityData: followers following num
+  const identityData = useQuery(GET_IDENTITY, {
+    variables: {
+      address: address,
+    },
+  }).data;
 
-  const initCyberConnect = useCallback((provider: any) => {
-    const cyberConnect = new CyberConnect({
-      provider,
-      namespace: 'CyberConnect',
-    });
-
-    setCyberConnect(cyberConnect);
-  }, []);
-
-  const connectWallet = React.useCallback(async () => {
-    const web3Modal = new Web3Modal({
-      network: 'mainnet',
-      cacheProvider: true,
-      providerOptions: {},
-    });
-
-    const instance = await web3Modal.connect();
-
-    const provider = new ethers.providers.Web3Provider(instance);
-    const signer = provider.getSigner();
-    const address = await signer.getAddress();
-    const ens = await getEnsByAddress(provider, address);
-
-    setAddress(address);
-    setEns(ens);
-    initCyberConnect(provider);
-  }, [initCyberConnect]);
+  useEffect(() => {
+    if (identityData) {
+      setIdentity(identityData.identity);
+    }
+  }, [identityData]);
 
   return (
     <Web3Context.Provider
       value={{
-        connectWallet,
         address,
-        ens,
-        cyberConnect,
+        identity,
       }}
     >
       {children}
