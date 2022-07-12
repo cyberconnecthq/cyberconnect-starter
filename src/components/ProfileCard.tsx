@@ -148,7 +148,7 @@ function ProfileCard() {
                           <img
                             src={nft.metadata.image}
                             className="w-10 "
-                            alt={""}
+                            alt={name}
                           />
                         ) : (
                           <ImageNotSupportedIcon
@@ -194,7 +194,7 @@ function ProfileCard() {
                           <img
                             src={poap.event.image_url}
                             className="w-10 "
-                            alt={""}
+                            alt={name}
                           />
                         ) : (
                           <ImageNotSupportedIcon
