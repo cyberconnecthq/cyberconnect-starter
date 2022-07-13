@@ -40,7 +40,7 @@ function ProfileCard() {
       if (res.status === 200) {
         response = await res.json();
       }
-      setNfts(response.ownedNfts);
+      setNfts(response?.ownedNfts);
       setIsLoading(false);
     })();
   }, [address]);
@@ -148,7 +148,7 @@ function ProfileCard() {
                           <img
                             src={nft.metadata.image}
                             className="w-10 "
-                            alt={name}
+                            alt={""}
                           />
                         ) : (
                           <ImageNotSupportedIcon
@@ -194,7 +194,7 @@ function ProfileCard() {
                           <img
                             src={poap.event.image_url}
                             className="w-10 "
-                            alt={name}
+                            alt={""}
                           />
                         ) : (
                           <ImageNotSupportedIcon
