@@ -18,7 +18,7 @@ export const Web3Context = React.createContext<Web3ContextInterface>({
 });
 
 export const Web3ContextProvider: React.FC = ({ children }) => {
-  const { address, isConnecting, isDisconnected } = useAccount();
+  const { address } = useAccount();
   const [identity, setIdentity] = useState<Identity | null>(null);
 
   //Fetch IdentityData: followers following num

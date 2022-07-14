@@ -5,11 +5,19 @@ export const GET_RECOMMENDATIONS = gql`
     recommendations(address: $address) {
       result
       data {
-        list {
-          address
-          domain
-          recommendationReason
-        }
+          pageInfo {
+              startCursor
+              endCursor
+              hasNextPage
+              hasPreviousPage
+          }
+          list {
+              address
+              domain
+              avatar
+              recommendationReason
+              followerCount
+          }
       }
     }
   }

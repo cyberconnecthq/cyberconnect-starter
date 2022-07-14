@@ -97,6 +97,21 @@ function ProfileCard() {
                   }}
                 >
                   {identity.ens}
+                
+                </Typography>
+              ) : (
+                <Typography variant="h4"></Typography>
+              )}
+              {identity.social.twitter ? (
+                <Typography
+                  variant="h6"
+                  sx={{
+                    margin: "10px 20px",
+                    fontFamily: "Outfit",
+                  }}
+                >
+              
+                  Twitter: {identity.social.twitter}
                 </Typography>
               ) : (
                 <Typography variant="h4"></Typography>
@@ -209,7 +224,7 @@ function ProfileCard() {
                     </Tooltip>
                   </div>
                 ))
-              ) : (
+                ) : (
                 <Typography className="">No POAPS :(</Typography>
               )}
             </div>
