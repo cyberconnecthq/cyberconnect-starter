@@ -2,7 +2,7 @@ import { gql } from "@apollo/client";
 
 export const GET_RECOMMENDATIONS = gql`
   query($address: String!) {
-    recommendations(address: $address) {
+    recommendations(address: $address, $first: Int) {
       result
       data {
           pageInfo {
